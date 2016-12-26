@@ -1,0 +1,19 @@
+[package]
+name = "open189"
+version = "0.1.0"
+authors = ["Wang Xuerui <git@xen0n.name>"]
+description = "A Rust client for the open.189.cn API"
+repository = "https://github.com/xen0n/open189-rs"
+readme = "README.md"
+license = "Apache-2.0/MIT"
+include = ["src/*.rs", "Cargo.toml"]
+
+
+[dependencies]
+chrono = "0.2"
+error-chain = "0.7"
+hyper = "0.9"
+lazy_static = "0.2"
+serde = "0.8"
+serde_derive = "0.8"
+serde_json = "0.8"
