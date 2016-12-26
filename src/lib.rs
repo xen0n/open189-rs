@@ -2,6 +2,7 @@
 #![recursion_limit = "1024"]
 
 extern crate chrono;
+extern crate crypto;
 #[macro_use]
 extern crate error_chain;
 extern crate hyper;
