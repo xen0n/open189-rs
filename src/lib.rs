@@ -13,6 +13,7 @@ extern crate rustc_serialize;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate url;
 
 pub mod errors {
     error_chain! {

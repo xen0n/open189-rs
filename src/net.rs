@@ -5,6 +5,12 @@ use std::sync::Arc;
 use hyper::client::Client;
 use hyper::client::Response;
 use hyper::client::IntoUrl;
+use hyper::header::ContentType;
+use hyper::header::Headers;
+use hyper::mime;
+
+use url::form_urlencoded;
+use url::form_urlencoded::Target;
 
 use super::errors::*;
 use super::sig;
@@ -74,6 +80,43 @@ impl<'a> Open189Client<'a> {
 
         let response = self.http.get(url).send()?;
 
+        Ok(response)
+    }
+
+    pub fn post_sync<U: IntoUrl>(&self,
+                                 url: U,
+                                 mut params: HashMap<&'static str, String>)
+                                 -> Result<Response> {
+        self.require_access_token()?;
+        prepare_request_params(&mut params,
+                               self.app_id,
+                               self.secret,
+                               self.access_token.unwrap());
+        self.post_sync_prepared(url, params)
+    }
+
+    fn post_sync_prepared<U: IntoUrl>(&self,
+                                      url: U,
+                                      params: HashMap<&'static str, String>)
+                                      -> Result<Response> {
+        let url = url.into_url()?;
+        let body = {
+            let mut serializer = form_urlencoded::Serializer::new(String::new());
+            for (k, v) in params.iter() {
+                serializer.append_pair(k, v);
+            }
+            serializer.finish()
+        };
+
+        let headers = {
+            let mut tmp = Headers::new();
+            tmp.set(ContentType(mime::Mime(mime::TopLevel::Application,
+                                           mime::SubLevel::WwwFormUrlEncoded,
+                                           vec![(mime::Attr::Charset, mime::Value::Utf8)])));
+            tmp
+        };
+
+        let response = self.http.post(url).headers(headers).body(&body).send()?;
         Ok(response)
     }
 }
