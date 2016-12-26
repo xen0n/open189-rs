@@ -11,6 +11,18 @@ error_chain! {
                     state,
                     message)
         }
+
+        WrongSmsCodeLength(length_actual: usize, length_expected: usize) {
+            description("wrong SMS verification code length")
+            display("wrong SMS verification code length: expected {}, got {}",
+                    length_expected,
+                    length_actual)
+        }
+
+        NonDigitInSmsCode(code: String) {
+            description("non-digit character found in SMS verification code")
+            display("non-digit char in SMS verification code: {:?}", code)
+        }
     }
 
     foreign_links {

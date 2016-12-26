@@ -10,6 +10,7 @@ use super::resp::IntoResult;
 use super::net::Open189Client;
 
 const URL_SMS_TOKEN: &'static str = "http://api.189.cn/v2/dm/randcode/token";
+const URL_SMS_SEND_WITH_CODE: &'static str = "http://api.189.cn/v2/dm/randcode/sendSms";
 
 
 pub struct Open189App {
@@ -55,6 +56,35 @@ impl Open189App {
                                                              self.secret(),
                                                              access_token.as_ref(),
                                                              URL_SMS_TOKEN,
+                                                             params)
+    }
+
+    pub fn sms_send_verification_code<S: AsRef<str>>(&self,
+                                                     access_token: S,
+                                                     sms_token: S,
+                                                     phone: S,
+                                                     code: S,
+                                                     expire_time: Option<usize>)
+                                                     -> Result<msg::SentSmsCode> {
+        let code = code.as_ref().to_string();
+        if code.len() != 6 {
+            return Err(ErrorKind::WrongSmsCodeLength(code.len(), 6).into());
+        }
+        if !code.chars().all(|ch| ch.is_digit(10)) {
+            return Err(ErrorKind::NonDigitInSmsCode(code).into());
+        }
+
+        let mut params = HashMap::new();
+        params.insert("token", sms_token.as_ref().to_string());
+        params.insert("phone", phone.as_ref().to_string());
+        if expire_time.is_some() {
+            params.insert("exp_time", format!("{}", expire_time.unwrap()));
+        }
+        params.insert("randcode", code);
+        self.client.post_sync::<_, _, resp::SmsCodeResponse>(self.app_id(),
+                                                             self.secret(),
+                                                             access_token.as_ref(),
+                                                             URL_SMS_SEND_WITH_CODE,
                                                              params)
     }
 }
