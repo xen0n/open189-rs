@@ -9,6 +9,8 @@ use super::resp;
 use super::resp::IntoResult;
 use super::net::Open189Client;
 
+const URL_SMS_TOKEN: &'static str = "http://api.189.cn/v2/dm/randcode/token";
+
 
 pub struct Open189App {
     app_id: String,
@@ -45,5 +47,14 @@ impl Open189App {
             .perform_access_token_req::<_, resp::AccessTokenResponse>(self.app_id(),
                                                                       self.secret(),
                                                                       params)
+    }
+
+    pub fn sms_get_token<S: AsRef<str>>(&self, access_token: S) -> Result<String> {
+        let mut params = HashMap::new();
+        self.client.get_sync::<_, _, resp::SmsTokenResponse>(self.app_id(),
+                                                             self.secret(),
+                                                             access_token.as_ref(),
+                                                             URL_SMS_TOKEN,
+                                                             params)
     }
 }

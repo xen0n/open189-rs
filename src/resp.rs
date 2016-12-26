@@ -40,3 +40,27 @@ impl IntoResult for AccessTokenResponse {
         }
     }
 }
+
+
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SmsTokenResponse {
+    #[serde(rename="res_code")]
+    retcode: u64,
+    #[serde(rename="res_message")]
+    message: Option<String>,
+    token: Option<String>,
+}
+
+
+impl IntoResult for SmsTokenResponse {
+    type Item = String;
+
+    fn into_result(self, http_status: StatusCode) -> Result<Self::Item> {
+        if self.retcode == 0 && self.token.is_some() {
+            Ok(self.token.unwrap())
+        } else {
+            Err(ErrorKind::ApiError(http_status, self.retcode, None, self.message).into())
+        }
+    }
+}
