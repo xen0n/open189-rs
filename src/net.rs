@@ -16,6 +16,8 @@ use super::errors::*;
 use super::sig;
 use super::util;
 
+const URL_ACCESS_TOKEN_REQ: &'static str = "https://oauth.api.189.cn/emp/oauth2/v3/access_token";
+
 
 pub struct Open189Client<'a> {
     http: Arc<Client>,
@@ -93,6 +95,15 @@ impl<'a> Open189Client<'a> {
                                self.secret,
                                self.access_token.unwrap());
         self.post_sync_prepared(url, params)
+    }
+
+    pub fn perform_access_token_req(&self,
+                                    mut params: HashMap<&'static str, String>)
+                                    -> Result<Response> {
+        params.insert("app_id", self.app_id.to_string());
+        params.insert("app_secret", self.secret.to_string());
+        params.insert("state", util::get_random_state_str());
+        self.post_sync_prepared(URL_ACCESS_TOKEN_REQ, params)
     }
 
     fn post_sync_prepared<U: IntoUrl>(&self,
