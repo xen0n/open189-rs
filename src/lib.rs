@@ -13,4 +13,5 @@ extern crate rustc_serialize;
 extern crate serde_derive;
 extern crate serde_json;
 
+mod sig;
 mod util;
