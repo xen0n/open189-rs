@@ -15,18 +15,12 @@ extern crate serde_derive;
 extern crate serde_json;
 extern crate url;
 
-pub mod errors {
-    error_chain! {
-        errors {
-        }
-
-        foreign_links {
-            HyperError(::hyper::Error);
-            HyperParseError(::hyper::error::ParseError);
-        }
-    }
-}
-
+mod app;
+pub mod errors;
+pub mod msg;
 mod net;
+mod resp;
 mod sig;
 mod util;
+
+pub use app::*;
