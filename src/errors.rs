@@ -3,9 +3,9 @@ error_chain! {
         ApiError(http_status: ::hyper::status::StatusCode,
                  retcode: u64,
                  state: Option<String>,
-                 message: String) {
+                 message: Option<String>) {
             description("open.189.cn API response error")
-            display("[HTTP {} res_code {} state {:?}] {}",
+            display("[HTTP {} res_code {} state {:?}] {:?}",
                     http_status,
                     retcode,
                     state,

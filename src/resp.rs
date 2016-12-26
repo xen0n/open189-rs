@@ -17,7 +17,7 @@ pub struct AccessTokenResponse {
     #[serde(rename="res_code")]
     retcode: u64,
     #[serde(rename="res_message")]
-    message: String,
+    message: Option<String>,
     state: String,
     access_token: Option<String>,
     expires_in: Option<u64>,
