@@ -41,11 +41,9 @@ impl Open189App {
     pub fn get_access_token_cc(&self) -> Result<msg::AccessToken> {
         let mut params = HashMap::new();
         params.insert("grant_type", "client_credentials".to_string());
-        let mut response = self.client
-            .perform_access_token_req(self.app_id(), self.secret(), params)?;
-        let mut response_str = String::new();
-        response.read_to_string(&mut response_str)?;
-        let obj: resp::AccessTokenResponse = ::serde_json::from_str(&response_str)?;
-        obj.into_result(response.status)
+        self.client
+            .perform_access_token_req::<_, resp::AccessTokenResponse>(self.app_id(),
+                                                                      self.secret(),
+                                                                      params)
     }
 }
