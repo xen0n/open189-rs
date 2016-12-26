@@ -14,5 +14,22 @@ extern crate rustc_serialize;
 extern crate serde_derive;
 extern crate serde_json;
 
+pub mod errors {
+    error_chain! {
+        errors {
+            AccessTokenRequired {
+                description("access token is required")
+                display("access token is required")
+            }
+        }
+
+        foreign_links {
+            HyperError(::hyper::Error);
+            HyperParseError(::hyper::error::ParseError);
+        }
+    }
+}
+
+mod net;
 mod sig;
 mod util;
