@@ -4,7 +4,8 @@ extern crate open189;
 fn main() {
     let args: Vec<_> = std::env::args().collect();
     if args.len() < 6 {
-        println!("usage: {} <app id> <secret> <access token> <phone> <code> <expire time>", args[0]);
+        println!("usage: {} <app id> <secret> <access token> <phone> <code> <expire time>",
+                 args[0]);
         std::process::exit(1);
     }
 
