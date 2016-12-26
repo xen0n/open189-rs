@@ -1,12 +1,10 @@
 use std::collections::HashMap;
-use std::io::Read;
 
 use hyper::client::Client;
 
 use super::errors::*;
 use super::msg;
 use super::resp;
-use super::resp::IntoResult;
 use super::net::Open189Client;
 
 const URL_SMS_TOKEN: &'static str = "http://api.189.cn/v2/dm/randcode/token";
@@ -51,7 +49,7 @@ impl Open189App {
     }
 
     pub fn sms_get_token<S: AsRef<str>>(&self, access_token: S) -> Result<String> {
-        let mut params = HashMap::new();
+        let params = HashMap::new();
         self.client.get_sync::<_, _, resp::SmsTokenResponse>(self.app_id(),
                                                              self.secret(),
                                                              access_token.as_ref(),

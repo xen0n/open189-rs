@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::hash::Hash;
 use std::io::Read;
 use std::sync::Arc;
 
@@ -13,7 +12,6 @@ use hyper::mime;
 use serde::Deserialize;
 
 use url::form_urlencoded;
-use url::form_urlencoded::Target;
 
 use super::errors::*;
 use super::resp::IntoResult;

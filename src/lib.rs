@@ -1,5 +1,6 @@
 #![feature(proc_macro)]
 #![recursion_limit = "1024"]
+#![deny(warnings)]
 
 extern crate chrono;
 extern crate crypto;
