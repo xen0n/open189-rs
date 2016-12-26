@@ -19,11 +19,8 @@ use super::util;
 const URL_ACCESS_TOKEN_REQ: &'static str = "https://oauth.api.189.cn/emp/oauth2/v3/access_token";
 
 
-pub struct Open189Client<'a> {
+pub struct Open189Client {
     http: Arc<Client>,
-    app_id: &'a str,
-    secret: &'a str,
-    access_token: Option<&'a str>,
 }
 
 
@@ -39,39 +36,26 @@ fn prepare_request_params(params: &mut HashMap<&'static str, String>,
 }
 
 
-impl<'a> Open189Client<'a> {
-    pub fn new(http_client: Client,
-               app_id: &'a str,
-               secret: &'a str,
-               access_token: Option<&'a str>)
-               -> Open189Client<'a> {
-        Open189Client {
-            http: Arc::new(http_client),
-            app_id: app_id,
-            secret: secret,
-            access_token: access_token,
-        }
+impl Open189Client {
+    pub fn new(http_client: Client) -> Open189Client {
+        Open189Client { http: Arc::new(http_client) }
     }
 
-    fn require_access_token(&self) -> Result<()> {
-        if self.access_token.is_none() {
-            Err(ErrorKind::AccessTokenRequired.into())
-        } else {
-            Ok(())
-        }
-    }
-
-    pub fn get_sync<U: IntoUrl>(&self,
-                                url: U,
-                                mut params: HashMap<&'static str, String>)
-                                -> Result<Response> {
-        self.require_access_token()?;
-
+    pub fn get_sync<U, S>(&self,
+                          app_id: S,
+                          secret: S,
+                          access_token: S,
+                          url: U,
+                          mut params: HashMap<&'static str, String>)
+                          -> Result<Response>
+        where U: IntoUrl,
+              S: AsRef<str>
+    {
         let mut url = url.into_url()?;
         prepare_request_params(&mut params,
-                               self.app_id,
-                               self.secret,
-                               self.access_token.unwrap());
+                               app_id.as_ref(),
+                               secret.as_ref(),
+                               access_token.as_ref());
         {
             let mut qs = url.query_pairs_mut();
             qs.clear();
@@ -85,23 +69,30 @@ impl<'a> Open189Client<'a> {
         Ok(response)
     }
 
-    pub fn post_sync<U: IntoUrl>(&self,
-                                 url: U,
-                                 mut params: HashMap<&'static str, String>)
-                                 -> Result<Response> {
-        self.require_access_token()?;
+    pub fn post_sync<U, S>(&self,
+                           app_id: S,
+                           secret: S,
+                           access_token: S,
+                           url: U,
+                           mut params: HashMap<&'static str, String>)
+                           -> Result<Response>
+        where U: IntoUrl,
+              S: AsRef<str>
+    {
         prepare_request_params(&mut params,
-                               self.app_id,
-                               self.secret,
-                               self.access_token.unwrap());
+                               app_id.as_ref(),
+                               secret.as_ref(),
+                               access_token.as_ref());
         self.post_sync_prepared(url, params)
     }
 
-    pub fn perform_access_token_req(&self,
-                                    mut params: HashMap<&'static str, String>)
-                                    -> Result<Response> {
-        params.insert("app_id", self.app_id.to_string());
-        params.insert("app_secret", self.secret.to_string());
+    pub fn perform_access_token_req<S: AsRef<str>>(&self,
+                                                   app_id: S,
+                                                   secret: S,
+                                                   mut params: HashMap<&'static str, String>)
+                                                   -> Result<Response> {
+        params.insert("app_id", app_id.as_ref().to_string());
+        params.insert("app_secret", secret.as_ref().to_string());
         params.insert("state", util::get_random_state_str());
         self.post_sync_prepared(URL_ACCESS_TOKEN_REQ, params)
     }

@@ -18,10 +18,6 @@ extern crate url;
 pub mod errors {
     error_chain! {
         errors {
-            AccessTokenRequired {
-                description("access token is required")
-                display("access token is required")
-            }
         }
 
         foreign_links {
