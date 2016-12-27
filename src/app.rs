@@ -56,33 +56,69 @@ impl Open189App {
                                                              URL_SMS_TOKEN,
                                                              params)
     }
+}
 
+
+pub struct PreparedSmsCode<'a> {
+    phone: &'a str,
+    code: &'a str,
+    expire_time: Option<usize>,
+}
+
+
+pub enum SmsCodeConfig<'a> {
+    Prepared(PreparedSmsCode<'a>),
+}
+
+
+impl<'a> SmsCodeConfig<'a> {
+    pub fn prepared(phone: &'a str,
+                    code: &'a str,
+                    expire_time: Option<usize>)
+                    -> SmsCodeConfig<'a> {
+        SmsCodeConfig::Prepared(PreparedSmsCode {
+            phone: phone,
+            code: code,
+            expire_time: expire_time,
+        })
+    }
+}
+
+
+impl Open189App {
     pub fn sms_send_verification_code<S: AsRef<str>>(&self,
                                                      access_token: S,
                                                      sms_token: S,
-                                                     phone: S,
-                                                     code: S,
-                                                     expire_time: Option<usize>)
+                                                     config: SmsCodeConfig)
                                                      -> Result<msg::SentSmsCode> {
-        let code = code.as_ref().to_string();
-        if code.len() != 6 {
-            return Err(ErrorKind::WrongSmsCodeLength(code.len(), 6).into());
-        }
-        if !code.chars().all(|ch| ch.is_digit(10)) {
-            return Err(ErrorKind::NonDigitInSmsCode(code).into());
-        }
-
         let mut params = HashMap::new();
         params.insert("token", sms_token.as_ref().to_string());
-        params.insert("phone", phone.as_ref().to_string());
-        if expire_time.is_some() {
-            params.insert("exp_time", format!("{}", expire_time.unwrap()));
+
+        let url;
+        match config {
+            SmsCodeConfig::Prepared(config) => {
+                url = URL_SMS_SEND_WITH_CODE;
+
+                let code = config.code;
+                if code.len() != 6 {
+                    return Err(ErrorKind::WrongSmsCodeLength(code.len(), 6).into());
+                }
+                if !code.chars().all(|ch| ch.is_digit(10)) {
+                    return Err(ErrorKind::NonDigitInSmsCode(code.to_string()).into());
+                }
+                params.insert("randcode", code.to_string());
+
+                params.insert("phone", config.phone.to_string());
+                if let Some(expire_time) = config.expire_time {
+                    params.insert("exp_time", format!("{}", expire_time));
+                }
+            }
         }
-        params.insert("randcode", code);
+
         self.client.post_sync::<_, _, resp::SmsCodeResponse>(self.app_id(),
                                                              self.secret(),
                                                              access_token.as_ref(),
-                                                             URL_SMS_SEND_WITH_CODE,
+                                                             url,
                                                              params)
     }
 }

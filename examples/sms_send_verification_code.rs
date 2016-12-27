@@ -25,6 +25,8 @@ fn main() {
     println!("sms token = {:?}", sms_token);
     let sms_token = sms_token.unwrap();
 
-    let result = app.sms_send_verification_code(access_token, &sms_token, phone, code, expire_time);
+    let config = open189::SmsCodeConfig::prepared(phone, code, expire_time);
+
+    let result = app.sms_send_verification_code(access_token, &sms_token, config);
     println!("send result = {:?}", result);
 }
