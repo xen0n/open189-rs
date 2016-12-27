@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
 use hyper::client::Client;
+use hyper::client::IntoUrl;
+
+use url::Url;
 
 use super::errors::*;
 use super::msg;
@@ -9,6 +12,7 @@ use super::net::Open189Client;
 
 const URL_SMS_TOKEN: &'static str = "http://api.189.cn/v2/dm/randcode/token";
 const URL_SMS_SEND_WITH_CODE: &'static str = "http://api.189.cn/v2/dm/randcode/sendSms";
+const URL_SMS_SEND_WITH_CALLBACK: &'static str = "http://api.189.cn/v2/dm/randcode/send";
 
 
 pub struct Open189App {
@@ -66,8 +70,16 @@ pub struct PreparedSmsCode<'a> {
 }
 
 
+pub struct CallbackSmsCode<'a> {
+    phone: &'a str,
+    url: Url,
+    expire_time: Option<usize>,
+}
+
+
 pub enum SmsCodeConfig<'a> {
     Prepared(PreparedSmsCode<'a>),
+    Callback(CallbackSmsCode<'a>),
 }
 
 
@@ -81,6 +93,17 @@ impl<'a> SmsCodeConfig<'a> {
             code: code,
             expire_time: expire_time,
         })
+    }
+
+    pub fn callback<U: IntoUrl>(phone: &'a str,
+                                callback_url: U,
+                                expire_time: Option<usize>)
+                                -> Result<SmsCodeConfig<'a>> {
+        Ok(SmsCodeConfig::Callback(CallbackSmsCode {
+            phone: phone,
+            url: callback_url.into_url()?,
+            expire_time: expire_time,
+        }))
     }
 }
 
@@ -109,6 +132,15 @@ impl Open189App {
                 params.insert("randcode", code.to_string());
 
                 params.insert("phone", config.phone.to_string());
+                if let Some(expire_time) = config.expire_time {
+                    params.insert("exp_time", format!("{}", expire_time));
+                }
+            }
+            SmsCodeConfig::Callback(config) => {
+                url = URL_SMS_SEND_WITH_CALLBACK;
+
+                params.insert("phone", config.phone.to_string());
+                params.insert("url", config.url.into_string());
                 if let Some(expire_time) = config.expire_time {
                     params.insert("exp_time", format!("{}", expire_time));
                 }
