@@ -1,0 +1,10 @@
+language: rust
+sudo: false
+rust:
+    - nightly
+script:
+    - cargo build
+    - cargo build --example get_access_token_cc
+    - cargo build --example sms_get_token
+    - cargo build --example sms_send_verification_code
+    - cargo test
