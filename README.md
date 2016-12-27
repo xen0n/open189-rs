@@ -1,5 +1,7 @@
 # open189-rs  [![Crates.io version](https://img.shields.io/crates/v/open189.svg)][cratesio] [![Crates.io downloads](https://img.shields.io/crates/dv/open189.svg)][cratesio] [![Crates.io license](https://img.shields.io/crates/l/open189.svg)](#License)
 
+[![Build Status](https://travis-ci.org/xen0n/open189-rs.svg?branch=develop)](https://travis-ci.org/xen0n/open189-rs)
+
 A Rust client for the [open.189.cn] (天翼开放平台) API.
 
 [open.189.cn]: http://open.189.cn
