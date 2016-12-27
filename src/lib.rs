@@ -1,5 +1,8 @@
+//! A Rust client for the `open.189.cn` API.
+
 #![feature(proc_macro)]
 #![recursion_limit = "1024"]
+#![deny(missing_docs)]
 #![deny(warnings)]
 
 extern crate chrono;
