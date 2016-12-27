@@ -11,4 +11,9 @@ A Rust client for the [open.189.cn] (天翼开放平台) API.
 [LICENSE-Apache](./LICENSE-Apache) and [LICENSE-MIT](./LICENSE-MIT) for details.
 
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for details.
+
+
 <!-- vim:set ai et ts=4 sw=4 sts=4 fenc=utf-8: -->
