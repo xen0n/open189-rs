@@ -26,9 +26,10 @@ Check out [the docs][docs-rs] or [the `examples/` directory](./examples) to
 learn how to use the library. You can send verification codes with SMS to
 mobile phones in Mainland China with this library, actually it's almost what the
 whole API service is all about. (The API has more features beyond SMS sending,
-but people are hardly making use of any of those. That's another story, on how
-the Chinese IT industry got so fragmented with so many vendors trying to build
-an omni-platform once and for all.)
+but people are hardly making use of any of those. That's another ~~rant~~ story,
+on how the Chinese IT industry got so fragmented, with so many vendors trying
+to build an omni-platform once and for all, instead of focusing on where each
+vendor excels.)
 
 
 ## Changelog
