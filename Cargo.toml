@@ -1,6 +1,6 @@
 [package]
 name = "open189"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Wang Xuerui <git@xen0n.name>"]
 description = "A Rust client for the open.189.cn API"
 repository = "https://github.com/xen0n/open189-rs"
