@@ -8,8 +8,8 @@ fn main() {
         std::process::exit(1);
     }
 
-    let ref app_id = args[1];
-    let ref secret = args[2];
+    let app_id = &args[1];
+    let secret = &args[2];
 
     let app = open189::Open189App::new(app_id, secret);
     let result = app.get_access_token_cc();

@@ -72,7 +72,7 @@ impl Open189Client {
         {
             let mut qs = url.query_pairs_mut();
             qs.clear();
-            for (k, v) in params.iter() {
+            for (k, v) in &params {
                 qs.append_pair(k.as_ref(), v.as_ref());
             }
         }
@@ -123,7 +123,7 @@ impl Open189Client {
         let url = url.into_url()?;
         let body = {
             let mut serializer = form_urlencoded::Serializer::new(String::new());
-            for (k, v) in params.iter() {
+            for (k, v) in &params {
                 serializer.append_pair(k, v);
             }
             serializer.finish()

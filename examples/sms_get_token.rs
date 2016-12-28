@@ -8,9 +8,9 @@ fn main() {
         std::process::exit(1);
     }
 
-    let ref app_id = args[1];
-    let ref secret = args[2];
-    let ref access_token = args[3];
+    let app_id = &args[1];
+    let secret = &args[2];
+    let access_token = &args[3];
 
     let app = open189::Open189App::new(app_id, secret);
     let result = app.sms_get_token(access_token);

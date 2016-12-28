@@ -9,11 +9,11 @@ fn main() {
         std::process::exit(1);
     }
 
-    let ref app_id = args[1];
-    let ref secret = args[2];
-    let ref access_token = args[3];
-    let ref phone = args[4];
-    let ref code = args[5];
+    let app_id = &args[1];
+    let secret = &args[2];
+    let access_token = &args[3];
+    let phone = &args[4];
+    let code = &args[5];
     let expire_time: Option<usize> = if args.len() < 7 {
         None
     } else {
