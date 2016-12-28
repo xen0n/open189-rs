@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Wang Xuerui <git@xen0n.name>"]
 description = "A Rust client for the open.189.cn API"
 repository = "https://github.com/xen0n/open189-rs"
+documentation = "https://docs.rs/open189"
 readme = "README.md"
 license = "Apache-2.0/MIT"
 include = ["src/*.rs", "Cargo.toml"]
