@@ -162,7 +162,7 @@ impl Open189App {
 /// This struct is not meant to be used directly; see [`SmsCodeConfig::prepared`]
 /// instead.
 ///
-/// [`SmsCodeConfig::prepared`]: ../enum.SmsCodeConfig.html#method.prepared
+/// [`SmsCodeConfig::prepared`]: enum.SmsCodeConfig.html#method.prepared
 pub struct PreparedSmsCode<'a> {
     phone: &'a str,
     code: &'a str,
@@ -175,7 +175,7 @@ pub struct PreparedSmsCode<'a> {
 /// This struct is not meant to be used directly; see [`SmsCodeConfig::callback`]
 /// instead.
 ///
-/// [`SmsCodeConfig::callback`]: ../enum.SmsCodeConfig.html#method.callback
+/// [`SmsCodeConfig::callback`]: enum.SmsCodeConfig.html#method.callback
 pub struct CallbackSmsCode<'a> {
     phone: &'a str,
     url: Url,
@@ -277,7 +277,7 @@ impl Open189App {
     ///
     /// [`get_access_token_cc`]: #method.get_access_token_cc
     /// [`sms_get_token`]: #method.sms_get_token
-    /// [ctors]: ../enum.SmsCodeConfig.html#methods
+    /// [ctors]: enum.SmsCodeConfig.html#methods
     ///
     /// # Examples
     ///
