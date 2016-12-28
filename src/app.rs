@@ -53,15 +53,18 @@ impl Open189App {
     ///
     /// # Examples
     ///
-    /// ```ignore
+    /// ```
+    /// # extern crate hyper;
+    /// # extern crate open189;
     /// use open189::Open189App;
-    /// use hyper;
     ///
+    /// # fn main() {
     /// let app_id = "your app id here";
     /// let secret = "your app secret here";
     /// let http_client = hyper::client::Client::new();
     /// // configure your HTTP client
     /// let client = Open189App::with_client(app_id, secret, http_client);
+    /// # }
     /// ```
     pub fn with_client<S: AsRef<str>>(app_id: S, secret: S, client: Client) -> Open189App {
         Open189App {
@@ -114,12 +117,12 @@ impl Open189App {
     ///
     /// # Examples
     ///
-    /// ```ignore
-    /// use open189::Open189App;
-    ///
-    /// let client = Open189App::new(app_id, secret);
+    /// ```no_run
+    /// # fn foo(client: &::open189::Open189App) -> ::open189::errors::Result<()> {
     /// let access_token = client.get_access_token_cc()?;
-    /// # store the access token somewhere!
+    /// // store the access token somewhere!
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn get_access_token_cc(&self) -> Result<msg::AccessToken> {
         let mut params = HashMap::new();
@@ -139,12 +142,13 @@ impl Open189App {
     ///
     /// # Examples
     ///
-    /// ```ignore
-    /// use open189::Open189App;
-    ///
-    /// let client = Open189App::new(app_id, secret);
+    /// ```no_run
+    /// # fn fetch_cached_access_token() -> &'static str { "dummy" }
+    /// # fn foo(client: &::open189::Open189App) -> ::open189::errors::Result<()> {
     /// let access_token = fetch_cached_access_token();
     /// let sms_token = client.sms_get_token(access_token)?;
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn sms_get_token<S: AsRef<str>>(&self, access_token: S) -> Result<String> {
         let params = HashMap::new();
@@ -207,13 +211,13 @@ impl<'a> SmsCodeConfig<'a> {
     ///
     /// # Examples
     ///
-    /// ```ignore
+    /// ```
     /// use open189::SmsCodeConfig;
     ///
-    /// # use default expiry time
+    /// // use default expiry time
     /// let config = SmsCodeConfig::prepared("12345678901", "234567", None);
     ///
-    /// # manually specify an expiry time of 5 min
+    /// // manually specify an expiry time of 5 min
     /// let config = SmsCodeConfig::prepared("12345678901", "234567", Some(5));
     /// ```
     pub fn prepared(phone: &'a str,
@@ -240,7 +244,7 @@ impl<'a> SmsCodeConfig<'a> {
     ///
     /// # Examples
     ///
-    /// ```ignore
+    /// ```
     /// use open189::SmsCodeConfig;
     ///
     /// let url = "https://api.example.com/v1/callback/sms";
@@ -281,16 +285,18 @@ impl Open189App {
     ///
     /// # Examples
     ///
-    /// ```ignore
-    /// use open189::Open189App;
+    /// ```no_run
     /// use open189::SmsCodeConfig;
     ///
-    /// let client = Open189App::new(app_id, secret);
+    /// # fn fetch_cached_access_token() -> &'static str { "dummy" }
+    /// # fn foo(client: &::open189::Open189App) -> ::open189::errors::Result<()> {
     /// let access_token = fetch_cached_access_token();
     /// let sms_token = client.sms_get_token(access_token)?;
     ///
     /// let config = SmsCodeConfig::prepared("12345678901", "234567", Some(5));
-    /// let result = client.sms_send_verification_code(access_token, sms_token, config)?;
+    /// let result = client.sms_send_verification_code(access_token, &sms_token, config)?;
+    /// # Ok(())
+    /// # }
     /// ```
     pub fn sms_send_verification_code<S: AsRef<str>>(&self,
                                                      access_token: S,
