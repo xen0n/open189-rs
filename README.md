@@ -6,7 +6,7 @@ A Rust client for the [open.189.cn] (天翼开放平台) API.
 
 Documentation is [available at docs.rs][docs-rs]. I *might* translate all of
 the docs to Chinese, as the service is largely useless for anyone outside of
-Mainland China, but since the i18n story of `rustdoc` isn't really there yet,
+Mainland China, but since the i18n story of `rustdoc` isn't really told yet,
 I decided to postpone this.
 
 [open.189.cn]: http://open.189.cn
